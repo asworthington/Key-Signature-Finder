@@ -3,27 +3,27 @@ from tkinter import messagebox
 
 # List of possible key signatures
 key_signatures = [
-    "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", 
-    "G#", "Ab", "A", "A#", "Bb", "B"
+    "Cb","C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", 
+    "G#", "Ab", "A", "A#", "Bb", "B", "B#"
 ]
 
 # Dictionary mapping key signatures to their corresponding keys
 key_signature_map = {
-    "C Major / A minor": ["C", "D", "E", "F", "G", "A", "B"],
-    "G Major / E minor": ["G", "A", "B", "C", "D", "E", "F#"],
-    "D Major / B minor": ["D", "E", "F#", "G", "A", "B", "C#"],
-    "A Major / F# minor": ["A", "B", "C#", "D", "E", "F#", "G#"],
-    "E Major / C# minor": ["E", "F#", "G#", "A", "B", "C#", "D#"],
-    "B Major / G# minor": ["B", "C#", "D#", "E", "F#", "G#", "A#"],
-    "F# Major / D# minor": ["F#", "G#", "A#", "B", "C#", "D#", "E#"],
-    "C# Major / A# minor": ["C#", "D#", "E#", "F#", "G#", "A#", "B#"],
-    "F Major / D minor": ["F", "G", "A", "Bb", "C", "D", "E"],
-    "Bb Major / G minor": ["Bb", "C", "D", "Eb", "F", "G", "A"],
-    "Eb Major / C minor": ["Eb", "F", "G", "Ab", "Bb", "C", "D"],
-    "Ab Major / F minor": ["Ab", "Bb", "C", "Db", "Eb", "F", "G"],
-    "Db Major / Bb minor": ["Db", "Eb", "F", "Gb", "Ab", "Bb", "C"],
-    "Gb Major / Eb minor": ["Gb", "Ab", "Bb", "Cb", "Db", "Eb", "F"],
-    "Cb Major / Ab minor": ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"]
+    "Cb major | Ab minor": ["Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"],
+    "Gb major | Eb minor": ["Gb", "Ab", "Bb", "Cb", "Db", "Eb", "F"],
+    "Db major | Bb minor": ["Db", "Eb", "F", "Gb", "Ab", "Bb", "C"],
+    "Ab major | F minor": ["Ab", "Bb", "C", "Db", "Eb", "F", "G"],
+    "Eb major | C minor": ["Eb", "F", "G", "Ab", "Bb", "C", "D"],
+    "Bb major | G minor": ["Bb", "C", "D", "Eb", "F", "G", "A"],
+    "F major | D minor": ["F", "G", "A", "Bb", "C", "D", "E"],
+    "C major | A minor": ["C", "D", "E", "F", "G", "A", "B"],
+    "G major | E minor": ["G", "A", "B", "C", "D", "E", "F#"],
+    "D major | B minor": ["D", "E", "F#", "G", "A", "B", "C#"],
+    "A major | F# minor": ["A", "B", "C#", "D", "E", "F#", "G#"],
+    "E major | C# minor": ["E", "F#", "G#", "A", "B", "C#", "D#"],
+    "B major | G# minor": ["B", "C#", "D#", "E", "F#", "G#", "A#"],
+    "F# major | D# minor": ["F#", "G#", "A#", "B", "C#", "D#", "E#"],
+    "C# major | A# minor": ["C#", "D#", "E#", "F#", "G#", "A#", "B#"],
 }
 
 # functions
@@ -37,18 +37,23 @@ def get_key_signature():
     thirdEntry = e3.get()
     fourthEntry = e4.get()
 
-    # check for empty or non-letter entries
-    if firstEntry not in key_signatures:
-        error_message()
-    elif secondEntry not in key_signatures:
-        error_message()
-    elif thirdEntry not in key_signatures:
-        error_message()
-    elif fourthEntry not in key_signatures:
+    entered_notes = [firstEntry, secondEntry, thirdEntry, fourthEntry]
+
+    # Check if all entered keys are valid key signatures
+    if not all(note in key_signatures for note in entered_notes):
         error_message()
     else:
-        finalResult = firstEntry + " " + secondEntry + " " + thirdEntry + " " + fourthEntry
-        lblResult.config(text="Result: " + finalResult)
+        matching_signatures = []
+        for signature, key_notes in key_signature_map.items():
+            # Check if all entered notes are present in the current key signature's notes
+            if all(note in key_notes for note in entered_notes):
+                matching_signatures.append(signature)
+
+        if matching_signatures:
+            final_result = "\n".join(matching_signatures)
+            lblResult.config(text="Matching Key Signatures:\n" + final_result)
+        else:
+            lblResult.config(text="No matching key signatures found")
 
 def remove_entries():
     e1.delete(0, END)
@@ -65,7 +70,7 @@ window.resizable(False, False)
 
 # configure monitor resolution
 app_width = 375
-app_height = 175
+app_height = 300
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2)-(app_width/2)
@@ -76,7 +81,7 @@ window.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
 window.tk.call('tk', 'scaling', 2.0)
 
 # header section
-lblHeader = Label(window, text="Enter a musical key (for example C-sharp or E-flat):", font=('Arial', 8))
+lblHeader = Label(window, text="Enter a musical key (for example C#/Db/E):", font=('Arial', 8))
 lblHeader.grid(column=0, row=0, pady=5)
 
 # entries
