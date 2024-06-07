@@ -2,8 +2,8 @@ from tkinter import *
 from tkinter import messagebox
 
 # List of possible key signatures
-key_signatures = [
-    "Cb","C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", 
+key_notes = [
+    "Cb", "C", "C#", "Db", "D", "D#", "Eb", "E", "E#", "Fb", "F", "F#", "Gb", "G", 
     "G#", "Ab", "A", "A#", "Bb", "B", "B#"
 ]
 
@@ -39,21 +39,18 @@ def get_key_signature(event=None):
 
     entered_notes = [firstEntry, secondEntry, thirdEntry, fourthEntry]
 
-    # Check if all entered keys are valid key signatures
-    if not all(note in key_signatures for note in entered_notes):
-        error_message()
-    else:
-        matching_signatures = []
-        for signature, key_notes in key_signature_map.items():
-            # Check if all entered notes are present in the current key signature's notes
-            if all(note in key_notes for note in entered_notes):
-                matching_signatures.append(signature)
+    # Check if all entered keys are valid subsets of key signatures
+    matching_signatures = []
+    for signature, key_notes in key_signature_map.items():
+        # Check if entered notes are a subset of the current key signature's notes
+        if set(entered_notes).issubset(set(key_notes)):
+            matching_signatures.append(signature)
 
-        if matching_signatures:
-            final_result = "\n".join(matching_signatures)
-            lblResult.config(text="Matching Key Signatures:\n" + final_result)
-        else:
-            lblResult.config(text="No matching key signatures found")
+    if matching_signatures:
+        final_result = "\n".join(matching_signatures)
+        lblResult.config(text="Matching Key Signatures:\n" + final_result)
+    else:
+        error_message()
 
 def remove_entries():
     e1.delete(0, END)
