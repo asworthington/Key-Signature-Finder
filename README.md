@@ -18,4 +18,6 @@ The Key Signature Finder is a Python application built with Tkinter that helps m
 - Maintain consistent formatting. For instance, use either flats (e.g., Db) or sharps (e.g., C#) within your entries, but not both in the same input.
 - The program assumes familiarity with basic music theory concepts related to key signatures.
 
- 
+ ## Author
+
+- **Development:** Alex Worthington
