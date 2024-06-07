@@ -28,10 +28,10 @@ key_signature_map = {
 
 # functions
 def error_message():
-    messagebox.showerror("Invalid entries", "Please try again.")
+    messagebox.showerror("Invalid entries", "Please try again. \nUse capital letters, \nno spaces or numbers, \nand #/b for sharps and flats.")
     lblResult.config(text="Error")
 
-def get_key_signature():
+def get_key_signature(event=None):
     firstEntry = e1.get()
     secondEntry = e2.get()
     thirdEntry = e3.get()
@@ -66,27 +66,24 @@ window = Tk()
 window.title('Key Signature Finder')
 icon = PhotoImage(file="icon.png")
 window.iconphoto(True, icon)
-window.resizable(False, False)
 
-# configure monitor resolution
-app_width = 375
-app_height = 300
+# configure window size and position
+app_width = 400
+app_height = 250
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 x = (screen_width/2)-(app_width/2)
 y = (screen_height/2)-(app_height/2)
-
-# configure window size
 window.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
 window.tk.call('tk', 'scaling', 2.0)
 
 # header section
-lblHeader = Label(window, text="Enter a musical key (for example C#/Db/E):", font=('Arial', 8))
-lblHeader.grid(column=0, row=0, pady=5)
+lblHeader = Label(window, text="Enter a musical key (for example C#/Db/E):", font=('Helvetica', 10))
+lblHeader.grid(column=0, row=0, sticky="nsew")
 
 # entries
 e_frame = Frame(window)
-e_frame.grid(column=0, row=1, pady=5)
+e_frame.grid(column=0, row=1, pady=5, ipadx=1, ipady=1)
 e1 = Entry(e_frame, width=5)
 e1.pack(side=LEFT, padx=3)
 e2 = Entry(e_frame, width=5)
@@ -99,13 +96,21 @@ e4.pack(side=LEFT, padx=3)
 # buttons
 btn_frame = Frame(window)
 btn_frame.grid(column=0, row=2, pady=5)
-btnOk = Button(btn_frame, text="Ok", bg="light gray", width=10, command=get_key_signature)
+btnOk = Button(btn_frame, text="Ok", font=('Helvetica', 10), bg="light gray", width=10, command=get_key_signature)
 btnOk.pack(side=LEFT, padx=3) 
-btnReset = Button(btn_frame, text="Reset", bg="light gray", width=10, command=remove_entries)
+btnReset = Button(btn_frame, text="Reset", font=('Helvetica', 10), bg="light gray", width=10, command=remove_entries)
 btnReset.pack(side=LEFT, padx=3) 
 
 # results
-lblResult = Label(window, text="Results: ",font=('Arial', 8))
+lblResult = Label(window, text="Results: ", font=('Helvetica', 10))
 lblResult.grid(column=0, row=3, pady=5)
+window.bind("<Return>", get_key_signature)
+
+# Center widgets in the window
+window.grid_rowconfigure(0, weight=1)
+window.grid_rowconfigure(1, weight=1)
+window.grid_rowconfigure(2, weight=1)
+window.grid_rowconfigure(3, weight=1)
+window.grid_columnconfigure(0, weight=1)
 
 window.mainloop()
